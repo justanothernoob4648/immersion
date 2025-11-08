@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=67", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "language-learning-agent"
+version = "0.1.0"
+description = "Pipecat-based language learning agent service"
+requires-python = ">=3.10"
+authors = [{name = "Possible", email = "dev@example.com"}]
+dependencies = [
+    "pipecat-ai>=0.0.79",
+    "python-dotenv>=1.0.1",
+    "pydantic>=2.7",
+    "aiohttp>=3.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.5.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+src = ["src"]

@@ -1,0 +1,29 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE/editor settings
+.idea/
+.vscode/
+*.swp
+
+# Runtime files
+.DS_Store
+.env
+.env.*
+
+# Logs
+*.log
+
