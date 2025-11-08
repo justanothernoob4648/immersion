@@ -7,7 +7,7 @@ Service-side implementation of a multimodal, role-play language tutor built on [
 - **OpenRouter-backed OpenAILLMService** for the conversation brain.
 - **ElevenLabsTTSService** for lifelike speech.
 - **TavusVideoService** for an animated avatar persona.
-- A custom **ConversationCoach** that injects props/stimuli and native-language nudges when the learner hesitates or falls silent.
+- A custom **ConversationCoach** that injects stimuli and native-language nudges when the learner hesitates or falls silent.
 
 > ✅ This repository only contains the server/agent implementation. A client (web, mobile, etc.) must provide the `webrtc_connection` and Tavus session objects at runtime.
 
@@ -112,8 +112,8 @@ You can tune the default session via environment variables:
 | `LANG_AGENT_LEARNER_NAME` | Friendly learner name | `Learner` |
 | `LANG_AGENT_PROFICIENCY` | Proficiency tag fed into prompts | `beginner` |
 | `LANG_AGENT_VOCAB` | Comma-separated list of vocab words to recycle | _(empty)_ |
-| `LANG_AGENT_DELIVER_PROPS` | `true`/`false` toggle for markdown props | `true` |
-| `LANG_AGENT_PROP_CHANNEL` | Label describing how props should be rendered | `markdown` |
+| `LANG_AGENT_DELIVER_STIMULI` | `true`/`false` toggle for markdown stimuli | `true` |
+| `LANG_AGENT_STIMULUS_CHANNEL` | Label describing how stimuli should be rendered | `markdown` |
 
 Additional integration knobs:
 
@@ -126,7 +126,7 @@ At runtime the pipeline stages are:
 2. `DeepgramFluxSTTService` streams transcripts into the pipeline.
 3. `TranscriptProcessor.user()` turns raw STT frames into structured messages.
 4. `ConversationCoach` injects system cues whenever the learner stalls so the LLM briefly reverts to the native language before resuming the target tongue.
-5. `LLMContextAggregatorPair.user()` maintains OpenAI-format context, seeding it with props built from the learner prompt.
+5. `LLMContextAggregatorPair.user()` maintains OpenAI-format context, seeding it with stimuli built from the learner prompt.
 6. `OpenAILLMService` (via OpenRouter) generates the assistant reply within the scenario.
 7. `ElevenLabsTTSService` vocalizes the response.
 8. `TavusVideoService` renders the avatar video stream that mouths the TTS audio.
@@ -135,7 +135,7 @@ At runtime the pipeline stages are:
 
 ## Customization notes
 
-- **Props & Stimuli** – The system prompt logic in `prompts.py` automatically instructs the LLM to emit markdown props (menus, tickets, etc.). Set `deliver_props=False` when building a `LanguageLearningSession` to disable this behavior.
+- **Stimuli** – The system prompt logic automatically instructs the LLM to emit concise markdown stimuli (menus, tickets, etc.). Set `deliver_stimuli=False` when building a `LanguageLearningSession` to disable this behavior.
 - **Native-language nudges** – Tune `AgentBuildConfig.stuck_timeout_seconds` and `hesitant_utterance_tokens` to control when the `ConversationCoach` interrupts with native-language assistance.
 - **Model selection** – Override `AgentBuildConfig.openrouter_model` with any OpenRouter-compatible model ID.
 

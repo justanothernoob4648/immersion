@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+:root {
+  /* Earthy, natural light palette */
+  --background: #f6f3ee; /* parchment */
+  --foreground: #2e2a27; /* warm charcoal */
+  --surface: #fffdf8; /* card */
+  --muted: #efe7dc; /* soft fill */
+  --border: #e7dfd4; /* subtle line */
+  --text-muted: #6f6a63; /* secondary text */
+
+  --accent: #b8694c; /* terracotta */
+  --accent-600: #a25c43; /* hover */
+  --accent-700: #8b503a; /* active */
+
+  /* Tile overlay palette (warm neutrals) */
+  --tile-1: #efe8de;
+  --tile-2: #e6dbcc;
+  --tile-3: #dbcdbb;
+  --tile-4: #d1c2ad;
+  --tile-5: #c6b7a1;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter);
+}
+
+/* Subtle paper-like radial glow + warm grid + grain */
+.bg-radial {
+  background: radial-gradient(900px 500px at 50% -20%, rgba(184, 105, 76, 0.16), transparent 60%),
+    radial-gradient(700px 360px at 85% 0%, rgba(184, 105, 76, 0.08), transparent 60%);
+}
+.bg-grid {
+  background-image: linear-gradient(to right, rgba(46, 42, 39, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(46, 42, 39, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
+  mask-image: radial-gradient(circle at center, white 58%, transparent 95%);
+  -webkit-mask-image: radial-gradient(circle at center, white 58%, transparent 95%);
+}
+.bg-grain {
+  background-image: radial-gradient(rgba(46, 42, 39, 0.06) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+  opacity: 0.25;
+}
+
+/* Tile animation (grid covers screen with staggered reveal) */
+@keyframes tileGrow {
+  0% {
+    transform: scaleY(0.02);
+    opacity: 0;
+  }
+  80% {
+    transform: scaleY(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* Subtle pulsing effect applied after tiles finish growing */
+@keyframes tilePulse {
+  0% {
+    filter: brightness(0.98);
+  }
+  50% {
+    filter: brightness(1.08);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+/* Lively random popping + subtle drift */
+@keyframes tilePop {
+  0% {
+    transform: translate(0, 0) rotate(0) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(var(--tx, 2px), var(--ty, -2px)) rotate(var(--rot, 1deg)) scale(var(--scale, 1.03));
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(var(--tx, 2px) * 0.3), calc(var(--ty, -2px) * 0.3)) rotate(calc(var(--rot, 1deg) * 0.3)) scale(1);
+    opacity: 0.95;
+  }
+}
+
+/* Reveal tiles as the cube passes */
+@keyframes tileReveal {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.tile-cell {
+  will-change: background, opacity, transform;
+}
+
+.cube-roll {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ffe7dd, #f6c2ad);
+  box-shadow: 0 8px 20px rgba(184, 105, 76, 0.25), 0 2px 6px rgba(0, 0, 0, 0.06);
+  transform-style: preserve-3d;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-anim {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Minimal micro-interactions only (no vibe-coded effects) */
+
+/* Simple confetti burst used on finish */
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(90vh) rotate(240deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+.confetti-piece {
+  position: absolute;
+  top: -2vh;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: confettiFall var(--dur, 1200ms) cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0ms) forwards;
+  will-change: transform, opacity;
+}
