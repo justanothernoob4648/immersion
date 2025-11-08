@@ -43,7 +43,7 @@ Install dependencies with either `pip install -r requirements.txt` or `pip insta
 
 ```python
 import asyncio
-from pipecat.transports.network.small_webrtc.connection import SmallWebRTCConnection
+from pipecat.transports.smallwebrtc.connection import SmallWebRTCConnection
 # Whatever SDK you use to negotiate Tavus sessions:
 from tavus_sdk import TavusSession
 
@@ -54,7 +54,7 @@ async def main():
     # Replace the ellipses with your actual SmallWeb connection details. Pipecat's
     # SmallWebRTCConnection just needs the signalling URL + auth token that your
     # client transport already knows about.
-    # Example kwargs; consult pipecat.transports.network.small_webrtc.connection docs
+    # Example kwargs; consult pipecat.transports.smallwebrtc.connection docs
     # for the exact constructor signature your deployment expects.
     webrtc_connection = SmallWebRTCConnection(
         host="wss://your-smallweb-edge",

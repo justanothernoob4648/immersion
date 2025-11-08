@@ -2,3 +2,11 @@ pipecat-ai>=0.0.79
 python-dotenv>=1.0.1
 pydantic>=2.7
 aiohttp>=3.9
+python-dotenv
+fastapi[all]
+uvicorn
+aiortc
+opencv-python
+aiohttp
+pipecat-ai[google,silero,webrtc,deepgram,cartesia,tavus,local-smart-turn-v3,daily]>=0.0.82
+pipecat-ai-small-webrtc-prebuilt
